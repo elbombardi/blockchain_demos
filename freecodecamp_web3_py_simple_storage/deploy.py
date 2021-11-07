@@ -42,7 +42,7 @@ private_key = "0x571ae5b5cb03f99b1295ad7c9f2d55ff62676ca1f0c6aa610b3b0ac56b8b32c
 # Create the contract in python
 SimpleStorage = w3.eth.contract(abi=abi, bytecode=bytecode)
 
-# Get the latest transaction
+# Get the latest transaction count
 nonce = w3.eth.getTransactionCount(my_address)
 # 1. Build a transaction
 transaction = SimpleStorage.constructor().buildTransaction(
