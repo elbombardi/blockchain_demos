@@ -4,9 +4,9 @@ import time
 
 
 def main():
-    deploy_lottery()
-    start_lottery()
-    enter_lottery()
+    # deploy_lottery()
+    # start_lottery()
+    # enter_lottery()
     end_lottery()
 
 
@@ -22,8 +22,8 @@ def deploy_lottery():
         publish_source=config["networks"][network.show_active()].get(
             "verify", False)
     )
+    print(f"Deployed Lottery {lottery.address}")
     return lottery
-    print("Deployed Lottery!")
 
 
 def start_lottery():
@@ -34,22 +34,23 @@ def start_lottery():
     print("Lottery started")
 
 
-def end_lottery():
-    print(f"Ending the lottery...")
-    account = get_account()
-    lottery = Lottery[-1]
-    tx = fund_with_link(lottery.address)
-    tx.wait(1)
-    tx2 = lottery.endLottery({"from": account})
-    tx2.wait(1)
-    time.sleep(60)
-    print(f"{lottery.winner()} is the winner of the lottery")
-
-
 def enter_lottery():
     account = get_account()
     lottery = Lottery[-1]
     value = lottery.getEntranceFee() + 100000000
     tx = lottery.enter({"from": account, "value": value})
     tx.wait(1)
-    print("You entered the lottery")
+    print(f"You entered the lottery with {value/1000000000000000000} eth")
+
+
+def end_lottery():
+    print(f"Ending the lottery...")
+    account = get_account()
+    lottery = Lottery[-1]
+    tx = fund_with_link(lottery.address)
+    tx.wait(1)
+    tx2 = lottery.endLottery(
+        {"from": account, "gas_limit": 400000, "allow_revert": True})
+    tx2.wait(1)
+    time.sleep(60)
+    print(f"{lottery.winner()} is the winner of the lottery")
