@@ -6,6 +6,10 @@ OPENSEA_FORMAT = "https://testnets.opensea.io/assets/{}/{}"
 
 
 def main():
+    deploy_and_create()
+
+
+def deploy_and_create():
     account = get_account()
     simple_collectible = SimpleCollectible.deploy({"from": account})
     tx = simple_collectible.createCollectible(
