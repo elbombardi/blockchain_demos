@@ -38,18 +38,22 @@ func main() {
 
 func randomNumber(w http.ResponseWriter, r *http.Request, params httprouter.Params) {
 	w.Header().Set("Content-Type", jsonHeader)
-	queryParams, _ := readQueryParams(r)
-	sizeParam := queryParams.Data["size"]
 	size := 1
-	if sizeParam != nil {
-		size = int(sizeParam.(float64))
+	id := "0"
+	queryParams, err := readQueryParams(r)
+	if err == nil {
+		id = queryParams.Id
+		sizeParam := queryParams.Data["size"]
+		if sizeParam != nil {
+			size = int(sizeParam.(float64))
+		}
 	}
 	num := []int{}
-	for i := 0; i < int(size); i++ {
+	for i := 0; i < size; i++ {
 		num = append(num, rand.Intn(100))
 	}
 	result := &AdapterResponse{
-		JobRunId: queryParams.Id,
+		JobRunId: id,
 		Data:     AdapterData{Result: num},
 		Error:    nil,
 	}
